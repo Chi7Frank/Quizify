@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Join an assessment room">
+  <title>Join Room - QuizMaster Pro</title>
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/pages/join-room.css">
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <button 
+        type="button" 
+        class="btn btn-ghost btn-icon"
+        onclick="history.back()"
+        aria-label="Go back"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_back_ios_new</span>
+      </button>
+      <h1 class="page-title">Join Room</h1>
+      <div class="header-spacer"></div>
+    </div>
+  </header>
+  
+  <!-- Main Content -->
+  <main id="main-content" class="main-content">
+    <div class="join-container">
+      <!-- Illustration -->
+      <div class="join-illustration" aria-hidden="true">
+        <div class="illustration-circle">
+          <span class="material-symbols-outlined">meeting_room</span>
+        </div>
+      </div>
+      
+      <h2 class="join-title">Enter Room Code</h2>
+      <p class="join-subtitle">Ask your teacher for the room code and enter it below.</p>
+      
+      <!-- Room Code Input -->
+      <form id="join-form" class="join-form" novalidate>
+        <div class="code-input-group">
+          <label for="room-code" class="sr-only">Room Code</label>
+          <input 
+            type="text" 
+            id="room-code" 
+            name="roomCode"
+            class="code-input" 
+            placeholder="XXXX-XX"
+            maxlength="7"
+            autocomplete="off"
+            aria-describedby="code-hint"
+          >
+          <p id="code-hint" class="code-hint">Enter the 6-character code</p>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-lg btn-full">
+          Join Room
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+        </button>
+      </form>
+      
+      <!-- Recent Rooms (for logged in users) -->
+      <div class="recent-section hidden" id="recent-section">
+        <h3 class="recent-title">Recent Rooms</h3>
+        <div class="recent-list" id="recent-list">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <div class="bottom-nav-items">
+      <a href="dashboard.html" class="bottom-nav-item">
+        <span class="material-symbols-outlined" aria-hidden="true">home</span>
+        <span>Home</span>
+      </a>
+      <a href="join-room.html" class="bottom-nav-item active" aria-current="page">
+        <span class="material-symbols-outlined" aria-hidden="true">login</span>
+        <span>Join</span>
+      </a>
+      <a href="profile.html" class="bottom-nav-item">
+        <span class="material-symbols-outlined" aria-hidden="true">person</span>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
+  
+  <!-- Scripts -->
+  <script src="scripts/utils.js"></script>
+  <script src="scripts/pages/join-room.js"></script>
+</body>
+</html>

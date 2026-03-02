@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Teacher Dashboard - Manage your assessment rooms">
+  <title>Teacher Dashboard - QuizMaster Pro</title>
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/pages/dashboard.css">
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="user-info">
+        <div class="avatar">
+          <img 
+            src="assets/default-avatar.svg" 
+            alt=""
+            id="user-avatar"
+            onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22%3E%3Ccircle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23dbeafe%22/%3E%3Ctext x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22%232463eb%22 font-size=%2216%22 font-weight=%22bold%22%3E?%3C/text%3E%3C/svg%3E'"
+          >
+          <span class="status-indicator" aria-hidden="true"></span>
+        </div>
+        <div class="user-details">
+          <span class="greeting">Good Morning,</span>
+          <span class="user-name" id="user-name">Loading...</span>
+        </div>
+      </div>
+      <button 
+        class="btn btn-ghost btn-icon"
+        aria-label="Notifications"
+        onclick="showToast('Notifications coming soon!', 'info')"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">notifications</span>
+      </button>
+    </div>
+  </header>
+  
+  <!-- Main Content -->
+  <main id="main-content" class="main-content">
+    <!-- Welcome Section -->
+    <section class="welcome-section" aria-labelledby="welcome-heading">
+      <h1 id="welcome-heading" class="welcome-title">Let's get started</h1>
+      <p class="welcome-subtitle">Create a new assessment room or join an existing one.</p>
+    </section>
+    
+    <!-- Action Cards -->
+    <section class="action-cards" aria-label="Quick actions">
+      <a href="create-room.html" class="action-card action-card-primary">
+        <div class="action-content">
+          <span class="action-icon" aria-hidden="true">
+            <span class="material-symbols-outlined">add</span>
+          </span>
+          <div class="action-text">
+            <h2 class="action-title">Create New Room</h2>
+            <p class="action-description">Host a new quiz or exam</p>
+          </div>
+        </div>
+        <span class="material-symbols-outlined action-arrow" aria-hidden="true">arrow_forward</span>
+      </a>
+      
+      <a href="join-room.html" class="action-card action-card-secondary">
+        <div class="action-content">
+          <span class="action-icon" aria-hidden="true">
+            <span class="material-symbols-outlined">login</span>
+          </span>
+          <div class="action-text">
+            <h2 class="action-title">Join Room</h2>
+            <p class="action-description">Enter a code to join</p>
+          </div>
+        </div>
+        <span class="material-symbols-outlined action-arrow" aria-hidden="true">arrow_forward</span>
+      </a>
+    </section>
+    
+    <!-- Recent Rooms Section -->
+    <section class="recent-rooms" aria-labelledby="recent-rooms-heading">
+      <div class="section-header">
+        <h2 id="recent-rooms-heading" class="section-title">Recent Rooms</h2>
+        <a href="rooms.html" class="view-all-link">View All</a>
+      </div>
+      
+      <div class="rooms-list" id="rooms-list" role="list">
+        <!-- Rooms will be loaded dynamically -->
+        <div class="loading-state">
+          <div class="spinner" aria-hidden="true"></div>
+          <p>Loading your rooms...</p>
+        </div>
+      </div>
+      
+      <!-- Empty State (hidden by default) -->
+      <div class="empty-state hidden" id="empty-state">
+        <span class="material-symbols-outlined empty-icon" aria-hidden="true">meeting_room</span>
+        <h3 class="empty-title">No rooms yet</h3>
+        <p class="empty-description">Create your first assessment room to get started.</p>
+        <a href="create-room.html" class="btn btn-primary">Create Room</a>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Floating Action Button -->
+  <a 
+    href="create-room.html" 
+    class="btn-fab"
+    aria-label="Create new room"
+  >
+    <span class="material-symbols-outlined" aria-hidden="true">add</span>
+  </a>
+  
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <div class="bottom-nav-items">
+      <a href="dashboard.html" class="bottom-nav-item active" aria-current="page">
+        <span class="material-symbols-outlined" aria-hidden="true">home</span>
+        <span>Home</span>
+      </a>
+      <a href="rooms.html" class="bottom-nav-item">
+        <span class="material-symbols-outlined" aria-hidden="true">meeting_room</span>
+        <span>Rooms</span>
+      </a>
+      <a href="create-room.html" class="bottom-nav-item nav-add">
+        <span class="material-symbols-outlined" aria-hidden="true">add</span>
+      </a>
+      <a href="reports.html" class="bottom-nav-item">
+        <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+        <span>Reports</span>
+      </a>
+      <a href="profile.html" class="bottom-nav-item">
+        <span class="material-symbols-outlined" aria-hidden="true">person</span>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
+  
+  <!-- Scripts -->
+  <script src="scripts/utils.js"></script>
+  <script src="scripts/pages/dashboard.js"></script>
+</body>
+</html>

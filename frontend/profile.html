@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - QuizMaster Pro</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <style>
+    .page-header { position: sticky; top: 0; z-index: var(--z-sticky); background: var(--color-bg-light); border-bottom: 1px solid var(--color-border); padding: var(--space-md) var(--space-lg); }
+    .header-content { display: flex; align-items: center; justify-content: space-between; max-width: var(--max-width-sm); margin: 0 auto; }
+    .page-title { font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); margin: 0; }
+    .main-content { max-width: var(--max-width-sm); margin: 0 auto; padding: var(--space-lg); padding-bottom: calc(var(--space-2xl) + 80px); }
+    .profile-header { display: flex; flex-direction: column; align-items: center; padding: var(--space-xl) 0; }
+    .profile-avatar { width: 100px; height: 100px; border-radius: var(--radius-full); background: var(--color-primary-light); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-md); }
+    .profile-avatar .material-symbols-outlined { font-size: 48px; color: var(--color-primary); }
+    .profile-name { font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); margin: 0 0 var(--space-xs); }
+    .profile-email { color: var(--color-text-secondary); margin: 0; }
+    .profile-role { margin-top: var(--space-sm); }
+    .settings-list { display: flex; flex-direction: column; gap: var(--space-xs); }
+    .settings-item { display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md); background: var(--color-surface-light); border-radius: var(--radius-lg); border: 1px solid var(--color-border); cursor: pointer; transition: all var(--transition-fast); }
+    .settings-item:hover { border-color: var(--color-primary); }
+    .settings-icon { width: 40px; height: 40px; border-radius: var(--radius-lg); background: var(--color-bg-light); display: flex; align-items: center; justify-content: center; color: var(--color-primary); }
+    .settings-content { flex: 1; }
+    .settings-title { font-weight: var(--font-weight-semibold); margin: 0; }
+    .settings-description { font-size: var(--font-size-xs); color: var(--color-text-muted); margin: 0; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--color-surface-light); border-top: 1px solid var(--color-border); padding: var(--space-sm) var(--space-lg) calc(var(--space-sm) + env(safe-area-inset-bottom)); z-index: var(--z-sticky); }
+    .bottom-nav-items { display: flex; justify-content: space-around; max-width: var(--max-width-sm); margin: 0 auto; }
+    .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: var(--space-xs) var(--space-sm); color: var(--color-text-muted); text-decoration: none; font-size: var(--font-size-xs); }
+    .bottom-nav-item.active { color: var(--color-primary); }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <header class="page-header">
+    <div class="header-content">
+      <div style="width:40px"></div>
+      <h1 class="page-title">Profile</h1>
+      <button type="button" class="btn btn-ghost btn-icon" aria-label="Settings">
+        <span class="material-symbols-outlined">settings</span>
+      </button>
+    </div>
+  </header>
+  
+  <main id="main-content" class="main-content">
+    <div class="profile-header">
+      <div class="profile-avatar">
+        <span class="material-symbols-outlined">person</span>
+      </div>
+      <h2 class="profile-name" id="user-name">Loading...</h2>
+      <p class="profile-email" id="user-email">loading@example.com</p>
+      <span class="badge badge-info profile-role" id="user-role">Teacher</span>
+    </div>
+    
+    <section aria-labelledby="settings-heading">
+      <h2 id="settings-heading" class="section-title" style="margin-bottom: var(--space-md);">Settings</h2>
+      
+      <div class="settings-list">
+        <button type="button" class="settings-item">
+          <div class="settings-icon">
+            <span class="material-symbols-outlined">notifications</span>
+          </div>
+          <div class="settings-content">
+            <p class="settings-title">Notifications</p>
+            <p class="settings-description">Manage your notification preferences</p>
+          </div>
+          <span class="material-symbols-outlined" style="color: var(--color-text-muted);">chevron_right</span>
+        </button>
+        
+        <button type="button" class="settings-item">
+          <div class="settings-icon">
+            <span class="material-symbols-outlined">accessibility</span>
+          </div>
+          <div class="settings-content">
+            <p class="settings-title">Accessibility</p>
+            <p class="settings-description">Text-to-speech, high contrast, and more</p>
+          </div>
+          <span class="material-symbols-outlined" style="color: var(--color-text-muted);">chevron_right</span>
+        </button>
+        
+        <button type="button" class="settings-item">
+          <div class="settings-icon">
+            <span class="material-symbols-outlined">dark_mode</span>
+          </div>
+          <div class="settings-content">
+            <p class="settings-title">Appearance</p>
+            <p class="settings-description">Dark mode and theme settings</p>
+          </div>
+          <span class="material-symbols-outlined" style="color: var(--color-text-muted);">chevron_right</span>
+        </button>
+        
+        <button type="button" class="settings-item">
+          <div class="settings-icon">
+            <span class="material-symbols-outlined">security</span>
+          </div>
+          <div class="settings-content">
+            <p class="settings-title">Security</p>
+            <p class="settings-description">Password and account security</p>
+          </div>
+          <span class="material-symbols-outlined" style="color: var(--color-text-muted);">chevron_right</span>
+        </button>
+      </div>
+    </section>
+    
+    <button type="button" class="btn btn-danger btn-full" style="margin-top: var(--space-xl);" onclick="logout()">
+      <span class="material-symbols-outlined">logout</span>
+      Logout
+    </button>
+  </main>
+  
+  <nav class="bottom-nav">
+    <div class="bottom-nav-items">
+      <a href="dashboard.html" class="bottom-nav-item">
+        <span class="material-symbols-outlined">home</span>
+        <span>Home</span>
+      </a>
+      <a href="rooms.html" class="bottom-nav-item">
+        <span class="material-symbols-outlined">meeting_room</span>
+        <span>Rooms</span>
+      </a>
+      <a href="reports.html" class="bottom-nav-item">
+        <span class="material-symbols-outlined">bar_chart</span>
+        <span>Reports</span>
+      </a>
+      <a href="profile.html" class="bottom-nav-item active">
+        <span class="material-symbols-outlined filled">person</span>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
+  
+  <script src="scripts/utils.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = getCurrentUser();
+      if (user) {
+        document.getElementById('user-name').textContent = user.fullName;
+        document.getElementById('user-email').textContent = user.email;
+        document.getElementById('user-role').textContent = user.role === 'teacher' ? 'Teacher' : 'Student';
+      }
+    });
+  </script>
+</body>
+</html>

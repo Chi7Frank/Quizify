@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Take your assessment">
+  <title>Exam in Progress - QuizMaster Pro</title>
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/pages/exam.css">
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to question</a>
+  
+  <!-- Header -->
+  <header class="exam-header">
+    <div class="header-top">
+      <div class="header-left">
+        <button 
+          type="button" 
+          class="btn btn-ghost btn-icon"
+          onclick="confirmExit()"
+          aria-label="Exit exam"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_back_ios_new</span>
+        </button>
+        <h1 class="exam-title">Exam in Progress</h1>
+      </div>
+      <button 
+        type="button" 
+        class="btn btn-primary btn-sm submit-btn"
+        onclick="confirmSubmit()"
+      >
+        <span>Submit</span>
+        <span class="material-symbols-outlined" aria-hidden="true">send</span>
+      </button>
+    </div>
+    
+    <!-- Timer -->
+    <div class="timer-row">
+      <div class="timer-label">
+        <span class="material-symbols-outlined" aria-hidden="true">timer</span>
+        <span>Remaining Time:</span>
+      </div>
+      <div class="timer-display" id="timer" aria-live="polite" aria-atomic="true">
+        <span class="timer-unit" id="timer-hours">00</span>
+        <span class="timer-separator">:</span>
+        <span class="timer-unit" id="timer-minutes">00</span>
+        <span class="timer-separator">:</span>
+        <span class="timer-unit" id="timer-seconds">00</span>
+      </div>
+    </div>
+    
+    <!-- Progress Bar -->
+    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Exam progress">
+      <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+    </div>
+  </header>
+  
+  <!-- Main Content -->
+  <main id="main-content" class="exam-content">
+    <!-- Question Status -->
+    <div class="question-status">
+      <div class="status-info">
+        <p class="question-counter" id="question-counter">Question 1 of 10</p>
+        <div class="auto-save-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="auto-save-text">Auto-saved</span>
+        </div>
+      </div>
+      <button 
+        type="button" 
+        class="btn btn-ghost btn-icon flag-btn"
+        onclick="toggleFlag()"
+        aria-label="Flag for review"
+        id="flag-btn"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">flag</span>
+      </button>
+    </div>
+    
+    <!-- Question Card -->
+    <div class="question-card" id="question-card">
+      <!-- Question content loaded dynamically -->
+    </div>
+    
+    <!-- Scratchpad -->
+    <div class="scratchpad">
+      <div class="scratchpad-header">
+        <span class="material-symbols-outlined" aria-hidden="true">edit_note</span>
+        <span class="scratchpad-title">Scratchpad</span>
+      </div>
+      <textarea 
+        class="scratchpad-input" 
+        placeholder="Type any rough notes here..."
+        id="scratchpad"
+        aria-label="Scratchpad for notes"
+      ></textarea>
+    </div>
+  </main>
+  
+  <!-- Footer Navigation -->
+  <footer class="exam-footer">
+    <div class="nav-buttons">
+      <button 
+        type="button" 
+        class="btn btn-secondary"
+        onclick="previousQuestion()"
+        id="prev-btn"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+        Previous
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-primary"
+        onclick="nextQuestion()"
+        id="next-btn"
+      >
+        Next
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+      </button>
+    </div>
+    
+    <!-- Question Dots -->
+    <div class="question-dots" id="question-dots" role="tablist" aria-label="Question navigation">
+      <!-- Dots loaded dynamically -->
+    </div>
+  </footer>
+  
+  <!-- Exit Confirmation Modal -->
+  <div class="modal-overlay hidden" id="exit-modal" role="dialog" aria-modal="true" aria-labelledby="exit-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="exit-title" class="modal-title">Exit Exam?</h2>
+      </div>
+      <div class="modal-body">
+        <p>Your progress has been saved. You can return to this exam later.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeExitModal()">Stay</button>
+        <button type="button" class="btn btn-danger" onclick="exitExam()">Exit</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Submit Confirmation Modal -->
+  <div class="modal-overlay hidden" id="submit-modal" role="dialog" aria-modal="true" aria-labelledby="submit-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="submit-title" class="modal-title">Submit Exam?</h2>
+      </div>
+      <div class="modal-body">
+        <p id="submit-message">You have answered X of Y questions. Are you sure you want to submit?</p>
+        <div class="submit-warning">
+          <span class="material-symbols-outlined" aria-hidden="true">warning</span>
+          <span>You cannot change your answers after submitting.</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeSubmitModal()">Review</button>
+        <button type="button" class="btn btn-primary" onclick="submitExam()">Submit</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Scripts -->
+  <script src="scripts/utils.js"></script>
+  <script src="scripts/pages/exam.js"></script>
+</body>
+</html>

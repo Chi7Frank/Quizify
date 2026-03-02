@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Rooms - QuizMaster Pro</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <style>
+    .page-header { position: sticky; top: 0; z-index: var(--z-sticky); background: var(--color-bg-light); border-bottom: 1px solid var(--color-border); padding: var(--space-md) var(--space-lg); }
+    .header-content { display: flex; align-items: center; justify-content: space-between; max-width: var(--max-width-sm); margin: 0 auto; }
+    .page-title { font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); margin: 0; }
+    .main-content { max-width: var(--max-width-sm); margin: 0 auto; padding: var(--space-lg); padding-bottom: calc(var(--space-2xl) + 80px); }
+    .tabs { display: flex; gap: var(--space-sm); margin-bottom: var(--space-lg); border-bottom: 1px solid var(--color-border); }
+    .tab { padding: var(--space-sm) var(--space-md); font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); color: var(--color-text-muted); border-bottom: 2px solid transparent; cursor: pointer; background: none; border-top: none; border-left: none; border-right: none; }
+    .tab.active { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+    .rooms-list { display: flex; flex-direction: column; gap: var(--space-md); }
+    .room-card { display: flex; flex-direction: column; gap: var(--space-md); padding: var(--space-md); background: var(--color-surface-light); border-radius: var(--radius-lg); border: 1px solid var(--color-border); text-decoration: none; color: inherit; transition: all var(--transition-fast); }
+    .room-card:hover { border-color: var(--color-primary); box-shadow: var(--shadow-md); }
+    .room-header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-md); }
+    .room-info { display: flex; align-items: center; gap: var(--space-md); }
+    .room-icon { width: 40px; height: 40px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .room-icon.science { background: #e0e7ff; color: #4f46e5; }
+    .room-icon.history { background: #ffedd5; color: #ea580c; }
+    .room-icon.math { background: #ccfbf1; color: #0d9488; }
+    .room-icon.default { background: var(--color-bg-light); color: var(--color-text-secondary); }
+    .room-details h3 { font-size: var(--font-size-base); font-weight: var(--font-weight-bold); margin: 0 0 var(--space-xs); }
+    .room-code { font-size: var(--font-size-xs); color: var(--color-text-muted); margin: 0; }
+    .room-divider { height: 1px; background: var(--color-border); width: 100%; }
+    .room-meta { display: flex; align-items: center; justify-content: space-between; font-size: var(--font-size-xs); color: var(--color-text-muted); }
+    .room-meta-item { display: flex; align-items: center; gap: var(--space-xs); }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--color-surface-light); border-top: 1px solid var(--color-border); padding: var(--space-sm) var(--space-lg) calc(var(--space-sm) + env(safe-area-inset-bottom)); z-index: var(--z-sticky); }
+    .bottom-nav-items { display: flex; justify-content: space-around; max-width: var(--max-width-sm); margin: 0 auto; }
+    .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: var(--space-xs) var(--space-sm); color: var(--color-text-muted); text-decoration: none; font-size: var(--font-size-xs); }
+    .bottom-nav-item.active { color: var(--color-primary); }
+    .btn-fab { position: fixed; bottom: 100px; right: var(--space-lg); width: 56px; height: 56px; background: var(--color-primary); color: white; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-lg); z-index: var(--z-sticky); }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <header class="page-header">
+    <div class="header-content">
+      <button type="button" class="btn btn-ghost btn-icon" onclick="history.back()" aria-label="Go back">
+        <span class="material-symbols-outlined">arrow_back_ios_new</span>
+      </button>
+      <h1 class="page-title">My Rooms</h1>
+      <div style="width:40px"></div>
+    </div>
+  </header>
+  
+  <main id="main-content" class="main-content">
+    <div class="tabs">
+      <button type="button" class="tab active">Active</button>
+      <button type="button" class="tab">Scheduled</button>
+      <button type="button" class="tab">Closed</button>
+    </div>
+    
+    <div class="rooms-list" id="rooms-list">
+      <div class="loading-state" style="text-align: center; padding: var(--space-xl); color: var(--color-text-muted);">
+        <div class="spinner" style="margin: 0 auto var(--space-md);"></div>
+        <p>Loading rooms...</p>
+      </div>
+    </div>
+  </main>
+  
+  <a href="create-room.html" class="btn-fab" aria-label="Create new room">
+    <span class="material-symbols-outlined">add</span>
+  </a>
+  
+  <nav class="bottom-nav">
+    <div class="bottom-nav-items">
+      <a href="dashboard.html" class="bottom-nav-item">
+        <span class="material-symbols-outlined">home</span>
+        <span>Home</span>
+      </a>
+      <a href="rooms.html" class="bottom-nav-item active">
+        <span class="material-symbols-outlined filled">meeting_room</span>
+        <span>Rooms</span>
+      </a>
+      <a href="reports.html" class="bottom-nav-item">
+        <span class="material-symbols-outlined">bar_chart</span>
+        <span>Reports</span>
+      </a>
+      <a href="profile.html" class="bottom-nav-item">
+        <span class="material-symbols-outlined">person</span>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
+  
+  <script src="scripts/utils.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!isAuthenticated()) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      await loadRooms();
+    });
+    
+    async function loadRooms() {
+      const roomsList = document.getElementById('rooms-list');
+      
+      try {
+        const response = await api.get('/rooms/teacher');
+        const rooms = response.data.rooms;
+        
+        if (rooms.length === 0) {
+          roomsList.innerHTML = `
+            <div style="text-align: center; padding: var(--space-2xl);">
+              <span class="material-symbols-outlined" style="font-size: 48px; color: var(--color-text-muted); margin-bottom: var(--space-md);">meeting_room</span>
+              <h3 style="margin-bottom: var(--space-sm);">No rooms yet</h3>
+              <p style="color: var(--color-text-secondary); margin-bottom: var(--space-lg);">Create your first assessment room to get started.</p>
+              <a href="create-room.html" class="btn btn-primary">Create Room</a>
+            </div>
+          `;
+          return;
+        }
+        
+        roomsList.innerHTML = rooms.map(room => renderRoomCard(room)).join('');
+        
+      } catch (error) {
+        roomsList.innerHTML = `
+          <div style="text-align: center; padding: var(--space-xl);">
+            <p style="color: var(--color-error);">Failed to load rooms</p>
+            <button class="btn btn-primary" onclick="loadRooms()" style="margin-top: var(--space-md);">Retry</button>
+          </div>
+        `;
+      }
+    }
+    
+    function renderRoomCard(room) {
+      const isActive = room.status === 'active';
+      const statusClass = isActive ? 'badge-success' : 'badge-neutral';
+      const statusText = isActive ? 'Active' : 'Finished';
+      
+      let iconClass = 'default';
+      let iconName = 'quiz';
+      const roomNameLower = room.room_name.toLowerCase();
+      
+      if (roomNameLower.includes('physics') || roomNameLower.includes('science') || roomNameLower.includes('bio')) {
+        iconClass = 'science';
+        iconName = 'science';
+      } else if (roomNameLower.includes('history')) {
+        iconClass = 'history';
+        iconName = 'history_edu';
+      } else if (roomNameLower.includes('math')) {
+        iconClass = 'math';
+        iconName = 'functions';
+      }
+      
+      const date = room.start_time ? new Date(room.start_time).toLocaleDateString() : 'Not scheduled';
+      const participantCount = room.participant_count || 0;
+      
+      return `
+        <a href="room-details.html?code=${room.room_code}" class="room-card">
+          <div class="room-header">
+            <div class="room-info">
+              <div class="room-icon ${iconClass}">
+                <span class="material-symbols-outlined">${iconName}</span>
+              </div>
+              <div class="room-details">
+                <h3>${escapeHtml(room.room_name)}</h3>
+                <p class="room-code">ID: #${room.room_code}</p>
+              </div>
+            </div>
+            <span class="badge ${statusClass}">${statusText}</span>
+          </div>
+          <div class="room-divider"></div>
+          <div class="room-meta">
+            <div class="room-meta-item">
+              <span class="material-symbols-outlined" style="font-size: 16px;">calendar_today</span>
+              <span>${date}</span>
+            </div>
+            <div class="room-meta-item">
+              <span class="material-symbols-outlined" style="font-size: 16px;">group</span>
+              <span>${participantCount} Students</span>
+            </div>
+          </div>
+        </a>
+      `;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+/**
+ * Join Room Page Styles
+ */
+
+.page-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background: var(--color-bg-light);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-md) var(--space-lg);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--max-width-sm);
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+}
+
+.header-spacer {
+  width: 40px;
+}
+
+/* Main Content */
+.main-content {
+  max-width: var(--max-width-sm);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+  padding-bottom: calc(var(--space-2xl) + 80px);
+}
+
+.join-container {
+  text-align: center;
+}
+
+/* Illustration */
+.join-illustration {
+  margin-bottom: var(--space-xl);
+}
+
+.illustration-circle {
+  width: 100px;
+  height: 100px;
+  background: var(--color-primary-light);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.illustration-circle .material-symbols-outlined {
+  font-size: 48px;
+  color: var(--color-primary);
+}
+
+.join-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-sm);
+}
+
+.join-subtitle {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-xl);
+}
+
+/* Code Input */
+.join-form {
+  margin-bottom: var(--space-2xl);
+}
+
+.code-input-group {
+  margin-bottom: var(--space-lg);
+}
+
+.code-input {
+  width: 100%;
+  padding: var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  background: var(--color-surface-light);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-fast);
+}
+
+.code-input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+.code-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px var(--focus-ring-color);
+}
+
+.code-input.form-input-error {
+  border-color: var(--color-error);
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.code-hint {
+  margin-top: var(--space-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* Recent Section */
+.recent-section {
+  text-align: left;
+}
+
+.recent-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-md);
+}
+
+.recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.recent-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--color-surface-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--transition-fast);
+}
+
+.recent-item:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.recent-item:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.recent-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--color-bg-light);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.recent-icon .material-symbols-outlined {
+  color: var(--color-text-muted);
+}
+
+.recent-info {
+  flex: 1;
+}
+
+.recent-name {
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+}
+
+.recent-code {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.recent-arrow {
+  color: var(--color-text-muted);
+}
+
+/* Utility */
+.hidden {
+  display: none !important;
+}

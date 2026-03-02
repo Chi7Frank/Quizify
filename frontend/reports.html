@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports - QuizMaster Pro</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <style>
+    .page-header { position: sticky; top: 0; z-index: var(--z-sticky); background: var(--color-bg-light); border-bottom: 1px solid var(--color-border); padding: var(--space-md) var(--space-lg); }
+    .header-content { display: flex; align-items: center; justify-content: space-between; max-width: var(--max-width-sm); margin: 0 auto; }
+    .page-title { font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); margin: 0; }
+    .main-content { max-width: var(--max-width-sm); margin: 0 auto; padding: var(--space-lg); padding-bottom: calc(var(--space-2xl) + 80px); }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-lg); }
+    .stat-card { background: var(--color-surface-light); border-radius: var(--radius-xl); padding: var(--space-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); }
+    .stat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-sm); }
+    .stat-label { font-size: var(--font-size-sm); color: var(--color-text-secondary); }
+    .stat-icon { color: var(--color-primary); }
+    .stat-value { font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); }
+    .stat-change { display: inline-flex; align-items: center; gap: 2px; font-size: var(--font-size-xs); color: var(--color-success); background: var(--color-success-light); padding: 2px 6px; border-radius: var(--radius-full); }
+    .search-bar { position: relative; margin-bottom: var(--space-md); }
+    .search-input { width: 100%; padding: var(--space-md) var(--space-md) var(--space-md) 44px; border: none; border-radius: var(--radius-lg); background: var(--color-surface-light); box-shadow: var(--shadow-sm); }
+    .search-icon { position: absolute; left: var(--space-md); top: 50%; transform: translateY(-50%); color: var(--color-text-muted); }
+    .filter-tabs { display: flex; gap: var(--space-sm); overflow-x: auto; margin-bottom: var(--space-md); }
+    .filter-tab { padding: var(--space-sm) var(--space-md); border-radius: var(--radius-lg); font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); border: 1px solid var(--color-border); background: var(--color-surface-light); white-space: nowrap; cursor: pointer; }
+    .filter-tab.active { background: var(--color-primary); color: white; border-color: var(--color-primary); }
+    .students-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md); }
+    .students-title { font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); text-transform: uppercase; color: var(--color-text-muted); letter-spacing: 0.05em; }
+    .student-card { display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md); background: var(--color-surface-light); border-radius: var(--radius-lg); border: 1px solid var(--color-border); margin-bottom: var(--space-md); }
+    .student-avatar { width: 40px; height: 40px; border-radius: var(--radius-full); background: #e0e7ff; display: flex; align-items: center; justify-content: center; font-weight: var(--font-weight-bold); color: #4f46e5; }
+    .student-info { flex: 1; }
+    .student-name { font-weight: var(--font-weight-semibold); margin: 0; }
+    .student-meta { font-size: var(--font-size-xs); color: var(--color-text-muted); margin: 0; }
+    .student-score { text-align: right; }
+    .score-value { font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--color-surface-light); border-top: 1px solid var(--color-border); padding: var(--space-sm) var(--space-lg) calc(var(--space-sm) + env(safe-area-inset-bottom)); z-index: var(--z-sticky); }
+    .bottom-nav-items { display: flex; justify-content: space-around; max-width: var(--max-width-sm); margin: 0 auto; }
+    .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: var(--space-xs) var(--space-sm); color: var(--color-text-muted); text-decoration: none; font-size: var(--font-size-xs); }
+    .bottom-nav-item.active { color: var(--color-primary); }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <header class="page-header">
+    <div class="header-content">
+      <button type="button" class="btn btn-ghost btn-icon" onclick="history.back()" aria-label="Go back">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+      <h1 class="page-title">Math 101 Midterm</h1>
+      <button type="button" class="btn btn-ghost" style="color: var(--color-primary); font-weight: var(--font-weight-semibold);">Help</button>
+    </div>
+  </header>
+  
+  <main id="main-content" class="main-content">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-label">Avg. Score</span>
+          <span class="material-symbols-outlined stat-icon">analytics</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--space-sm);">
+          <span class="stat-value">82%</span>
+          <span class="stat-change">
+            <span class="material-symbols-outlined" style="font-size: 12px;">arrow_upward</span>
+            5%
+          </span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-label">Completion</span>
+          <span class="material-symbols-outlined stat-icon">donut_large</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--space-sm);">
+          <span class="stat-value">95%</span>
+          <span class="stat-change">
+            <span class="material-symbols-outlined" style="font-size: 12px;">arrow_upward</span>
+            2%
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="search-bar">
+      <span class="material-symbols-outlined search-icon">search</span>
+      <input type="text" class="search-input" placeholder="Search student name...">
+    </div>
+    
+    <div class="filter-tabs">
+      <button type="button" class="filter-tab active">All Students</button>
+      <button type="button" class="filter-tab">Completed</button>
+      <button type="button" class="filter-tab">In Progress</button>
+      <button type="button" class="filter-tab">Missed</button>
+    </div>
+    
+    <div class="students-header">
+      <span class="students-title">Students (24)</span>
+      <button type="button" class="btn btn-ghost btn-sm" style="color: var(--color-primary);">
+        <span class="material-symbols-outlined">sort</span>
+        Sort
+      </button>
+    </div>
+    
+    <div class="students-list">
+      <div class="student-card">
+        <img src="https://i.pravatar.cc/150?img=1" alt="" class="student-avatar" style="padding: 0; overflow: hidden;">
+        <div class="student-info">
+          <p class="student-name">Sarah Johnson</p>
+          <p class="student-meta">Submitted 2h ago</p>
+        </div>
+        <div class="student-score">
+          <p class="score-value">92%</p>
+          <span class="badge badge-success">Passed</span>
+        </div>
+      </div>
+      
+      <div class="student-card">
+        <div class="student-avatar">MK</div>
+        <div class="student-info">
+          <p class="student-name">Michael Kim</p>
+          <p class="student-meta">In Progress • 45m left</p>
+        </div>
+        <div class="student-score">
+          <p class="score-value" style="color: var(--color-text-muted);">--</p>
+          <span class="badge badge-info">Active</span>
+        </div>
+      </div>
+      
+      <div class="student-card">
+        <img src="https://i.pravatar.cc/150?img=3" alt="" class="student-avatar" style="padding: 0; overflow: hidden;">
+        <div class="student-info">
+          <p class="student-name">David Chen</p>
+          <p class="student-meta">Submitted yesterday</p>
+        </div>
+        <div class="student-score">
+          <p class="score-value">78%</p>
+          <span class="badge badge-success">Passed</span>
+        </div>
+      </div>
+      
+      <div class="student-card">
+        <div class="student-avatar" style="background: #fce7f3; color: #be185d;">EA</div>
+        <div class="student-info">
+          <p class="student-name">Emily Adams</p>
+          <p class="student-meta">Submitted 3h ago</p>
+        </div>
+        <div class="student-score">
+          <p class="score-value" style="color: var(--color-error);">45%</p>
+          <span class="badge badge-error">Failed</span>
+        </div>
+      </div>
+      
+      <div class="student-card">
+        <img src="https://i.pravatar.cc/150?img=5" alt="" class="student-avatar" style="padding: 0; overflow: hidden;">
+        <div class="student-info">
+          <p class="student-name">James Wilson</p>
+          <p class="student-meta">Submitted 1d ago</p>
+        </div>
+        <div class="student-score">
+          <p class="score-value">88%</p>
+          <span class="badge badge-success">Passed</span>
+        </div>
+      </div>
+    </div>
+    
+    <button type="button" class="btn btn-secondary btn-full" style="margin-top: var(--space-lg);">
+      <span class="material-symbols-outlined">download</span>
+      Export Full Report
+    </button>
+  </main>
+  
+  <nav class="bottom-nav">
+    <div class="bottom-nav-items">
+      <a href="dashboard.html" class="bottom-nav-item">
+        <span class="material-symbols-outlined">home</span>
+        <span>Home</span>
+      </a>
+      <a href="add-questions.html" class="bottom-nav-item">
+        <span class="material-symbols-outlined">edit_document</span>
+        <span>Exams</span>
+      </a>
+      <a href="reports.html" class="bottom-nav-item active">
+        <span class="material-symbols-outlined filled">bar_chart</span>
+        <span>Results</span>
+      </a>
+      <a href="profile.html" class="bottom-nav-item">
+        <span class="material-symbols-outlined">person</span>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
+  
+  <script src="scripts/utils.js"></script>
+</body>
+</html>

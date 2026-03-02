@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Builder - QuizMaster Pro</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <style>
+    .page-header { position: sticky; top: 0; z-index: var(--z-sticky); background: var(--color-bg-light); border-bottom: 1px solid var(--color-border); padding: var(--space-md) var(--space-lg); }
+    .header-content { display: flex; align-items: center; justify-content: space-between; max-width: var(--max-width-sm); margin: 0 auto; }
+    .page-title { font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); margin: 0; }
+    .progress-container { padding: var(--space-lg); text-align: center; }
+    .progress-steps { display: flex; justify-content: center; gap: var(--space-sm); margin-bottom: var(--space-sm); }
+    .progress-step { width: 10px; height: 10px; border-radius: var(--radius-full); background: var(--color-border); }
+    .progress-step.active { width: 32px; background: var(--color-primary); }
+    .main-content { max-width: var(--max-width-sm); margin: 0 auto; padding: 0 var(--space-lg) var(--space-2xl); }
+    .section-title { font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); margin-bottom: var(--space-xs); }
+    .section-subtitle { color: var(--color-text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-lg); }
+    .field-card { display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md); background: var(--color-surface-light); border: 1px solid var(--color-border); border-radius: var(--radius-lg); margin-bottom: var(--space-md); }
+    .field-drag { color: var(--color-text-muted); cursor: grab; }
+    .field-info { flex: 1; }
+    .field-label { font-weight: var(--font-weight-semibold); margin: 0 0 var(--space-xs); }
+    .field-type { font-size: var(--font-size-xs); color: var(--color-text-muted); margin: 0; }
+    .field-required { font-size: var(--font-size-xs); color: var(--color-primary); font-weight: var(--font-weight-semibold); }
+    .add-field-area { border: 2px dashed var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg); text-align: center; margin: var(--space-lg) 0; }
+    .field-selection-title { font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--space-md); }
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
+    .field-option { display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md); background: var(--color-surface-light); border: 1px solid var(--color-border); border-radius: var(--radius-lg); cursor: pointer; transition: all var(--transition-fast); }
+    .field-option:hover { border-color: var(--color-primary); }
+    .field-option-icon { width: 36px; height: 36px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; }
+    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--color-surface-light); border-top: 1px solid var(--color-border); padding: var(--space-md) var(--space-lg) calc(var(--space-md) + env(safe-area-inset-bottom)); z-index: var(--z-sticky); }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <header class="page-header">
+    <div class="header-content">
+      <button type="button" class="btn btn-ghost btn-icon" onclick="history.back()" aria-label="Go back">
+        <span class="material-symbols-outlined">arrow_back_ios_new</span>
+      </button>
+      <h1 class="page-title">Form Builder</h1>
+      <div style="width:40px"></div>
+    </div>
+  </header>
+  
+  <div class="progress-container">
+    <div class="progress-steps">
+      <div class="progress-step"></div>
+      <div class="progress-step active"></div>
+      <div class="progress-step"></div>
+    </div>
+    <p class="progress-label">Step 2 of 3</p>
+  </div>
+  
+  <main id="main-content" class="main-content">
+    <h2 class="section-title">Registration Form</h2>
+    <p class="section-subtitle">Customize the fields for your attendance sheet.</p>
+    
+    <div id="fields-list">
+      <div class="field-card">
+        <span class="material-symbols-outlined field-drag">drag_indicator</span>
+        <div class="field-info">
+          <p class="field-required">Required Field</p>
+          <p class="field-label">Full Name</p>
+          <p class="field-type">Text Field</p>
+        </div>
+        <span class="badge badge-neutral">Locked</span>
+      </div>
+      
+      <div class="field-card">
+        <span class="material-symbols-outlined field-drag">drag_indicator</span>
+        <div class="field-info">
+          <p class="field-required">Required Field</p>
+          <p class="field-label">Email Address</p>
+          <p class="field-type">Email Field</p>
+        </div>
+        <span class="badge badge-neutral">Locked</span>
+      </div>
+    </div>
+    
+    <div class="add-field-area">
+      <p style="color: var(--color-text-muted); margin-bottom: var(--space-md);">Add custom fields for your students</p>
+      <button type="button" class="btn btn-primary" onclick="showFieldOptions()">
+        <span class="material-symbols-outlined">add_circle</span>
+        Add Field
+      </button>
+    </div>
+    
+    <div id="field-options" class="hidden">
+      <p class="field-selection-title">Field Selection</p>
+      <div class="field-grid">
+        <button type="button" class="field-option" onclick="addField('text')">
+          <div class="field-option-icon" style="background: #dbeafe; color: #2463eb;">
+            <span class="material-symbols-outlined">text_fields</span>
+          </div>
+          <span>Short Text</span>
+        </button>
+        <button type="button" class="field-option" onclick="addField('number')">
+          <div class="field-option-icon" style="background: #dcfce7; color: #16a34a;">
+            <span class="material-symbols-outlined">pin</span>
+          </div>
+          <span>Number</span>
+        </button>
+        <button type="button" class="field-option" onclick="addField('select')">
+          <div class="field-option-icon" style="background: #f3e8ff; color: #9333ea;">
+            <span class="material-symbols-outlined">arrow_drop_down_circle</span>
+          </div>
+          <span>Dropdown</span>
+        </button>
+        <button type="button" class="field-option" onclick="addField('email')">
+          <div class="field-option-icon" style="background: #ffedd5; color: #ea580c;">
+            <span class="material-symbols-outlined">alternate_email</span>
+          </div>
+          <span>Email</span>
+        </button>
+      </div>
+    </div>
+  </main>
+  
+  <div class="bottom-bar">
+    <button type="button" class="btn btn-primary btn-lg btn-full" onclick="nextStep()">
+      Next: Add Questions
+      <span class="material-symbols-outlined">arrow_forward_ios</span>
+    </button>
+  </div>
+  
+  <script src="scripts/utils.js"></script>
+  <script>
+    function showFieldOptions() {
+      document.getElementById('field-options').classList.remove('hidden');
+    }
+    
+    function addField(type) {
+      showToast(`${type} field added!`, 'success');
+      document.getElementById('field-options').classList.add('hidden');
+    }
+    
+    function nextStep() {
+      window.location.href = 'add-questions.html';
+    }
+  </script>
+</body>
+</html>

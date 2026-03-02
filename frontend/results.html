@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View your exam results">
+  <title>Exam Results - QuizMaster Pro</title>
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/pages/results.css">
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <button 
+        type="button" 
+        class="btn btn-ghost btn-icon"
+        onclick="history.back()"
+        aria-label="Go back"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+      </button>
+      <h1 class="page-title" id="exam-title">Results</h1>
+      <div class="header-spacer"></div>
+    </div>
+  </header>
+  
+  <!-- Main Content -->
+  <main id="main-content" class="main-content">
+    <!-- Loading State -->
+    <div class="loading-state" id="loading-state">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Loading your results...</p>
+    </div>
+    
+    <!-- Results Content -->
+    <div class="results-content hidden" id="results-content">
+      <!-- Score Card -->
+      <div class="score-card">
+        <div class="score-circle" id="score-circle">
+          <span class="score-percentage" id="score-percentage">--%</span>
+          <span class="score-label">Score</span>
+        </div>
+        <div class="score-details">
+          <p class="score-text" id="score-text">You answered -- out of -- questions correctly</p>
+          <span class="badge badge-success" id="pass-badge">Passed</span>
+        </div>
+      </div>
+      
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="material-symbols-outlined stat-icon" aria-hidden="true">check_circle</span>
+          <span class="stat-value" id="correct-count">--</span>
+          <span class="stat-label">Correct</span>
+        </div>
+        <div class="stat-card">
+          <span class="material-symbols-outlined stat-icon" aria-hidden="true">cancel</span>
+          <span class="stat-value" id="incorrect-count">--</span>
+          <span class="stat-label">Incorrect</span>
+        </div>
+        <div class="stat-card">
+          <span class="material-symbols-outlined stat-icon" aria-hidden="true">schedule</span>
+          <span class="stat-value" id="time-taken">--</span>
+          <span class="stat-label">Time</span>
+        </div>
+      </div>
+      
+      <!-- Questions Review -->
+      <section class="review-section" aria-labelledby="review-heading">
+        <h2 id="review-heading" class="section-title">Question Review</h2>
+        <div class="review-list" id="review-list">
+          <!-- Questions loaded dynamically -->
+        </div>
+      </section>
+      
+      <!-- Actions -->
+      <div class="results-actions">
+        <button type="button" class="btn btn-secondary btn-full" onclick="shareResults()">
+          <span class="material-symbols-outlined" aria-hidden="true">share</span>
+          Share Results
+        </button>
+        <a href="join-room.html" class="btn btn-primary btn-full">
+          <span class="material-symbols-outlined" aria-hidden="true">home</span>
+          Back to Home
+        </a>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Scripts -->
+  <script src="scripts/utils.js"></script>
+  <script src="scripts/pages/results.js"></script>
+</body>
+</html>

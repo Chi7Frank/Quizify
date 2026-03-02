@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register for Exam - QuizMaster Pro</title>
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <style>
+    .page-header { position: sticky; top: 0; z-index: var(--z-sticky); background: var(--color-bg-light); border-bottom: 1px solid var(--color-border); padding: var(--space-md) var(--space-lg); }
+    .header-content { display: flex; align-items: center; justify-content: space-between; max-width: var(--max-width-sm); margin: 0 auto; }
+    .page-title { font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); margin: 0; }
+    .main-content { max-width: var(--max-width-sm); margin: 0 auto; padding: var(--space-lg); padding-bottom: calc(var(--space-2xl) + 80px); }
+    .exam-info { background: var(--color-primary-light); border-radius: var(--radius-lg); padding: var(--space-lg); margin-bottom: var(--space-xl); }
+    .exam-info-title { font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: var(--color-primary); margin: 0 0 var(--space-sm); }
+    .exam-info-text { font-size: var(--font-size-sm); color: var(--color-primary-dark); margin: 0; }
+    .section-title { font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); margin-bottom: var(--space-lg); }
+    .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--color-surface-light); border-top: 1px solid var(--color-border); padding: var(--space-md) var(--space-lg) calc(var(--space-md) + env(safe-area-inset-bottom)); z-index: var(--z-sticky); }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <header class="page-header">
+    <div class="header-content">
+      <button type="button" class="btn btn-ghost btn-icon" onclick="history.back()" aria-label="Go back">
+        <span class="material-symbols-outlined">arrow_back_ios_new</span>
+      </button>
+      <h1 class="page-title">Registration</h1>
+      <div style="width:40px"></div>
+    </div>
+  </header>
+  
+  <main id="main-content" class="main-content">
+    <div class="exam-info" id="exam-info">
+      <h2 class="exam-info-title" id="exam-name">Loading...</h2>
+      <p class="exam-info-text" id="exam-instructions">Please fill out the registration form below.</p>
+    </div>
+    
+    <h2 class="section-title">Your Information</h2>
+    
+    <form id="registration-form" novalidate>
+      <div class="form-group">
+        <label for="full-name" class="form-label form-label-required">Full Name</label>
+        <input type="text" id="full-name" name="fullName" class="form-input" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="email" class="form-label form-label-required">Email Address</label>
+        <input type="email" id="email" name="email" class="form-input" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="student-id" class="form-label">Student ID</label>
+        <input type="text" id="student-id" name="studentId" class="form-input" placeholder="Optional">
+      </div>
+    </form>
+  </main>
+  
+  <div class="bottom-bar">
+    <button type="button" class="btn btn-primary btn-lg btn-full" onclick="startExam()">
+      Start Exam
+      <span class="material-symbols-outlined">arrow_forward</span>
+    </button>
+  </div>
+  
+  <script src="scripts/utils.js"></script>
+  <script>
+    let examData = null;
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      const joinData = sessionStorage.getItem('joinRoomData');
+      if (!joinData) {
+        window.location.href = 'join-room.html';
+        return;
+      }
+      
+      examData = JSON.parse(joinData);
+      document.getElementById('exam-name').textContent = examData.roomName;
+      
+      if (examData.instructions) {
+        document.getElementById('exam-instructions').textContent = examData.instructions;
+      }
+      
+      // Pre-fill if logged in
+      const user = getCurrentUser();
+      if (user) {
+        document.getElementById('full-name').value = user.fullName;
+        document.getElementById('email').value = user.email;
+      }
+    });
+    
+    async function startExam() {
+      const form = document.getElementById('registration-form');
+      const formData = new FormData(form);
+      
+      // Validate
+      const fullName = formData.get('fullName');
+      const email = formData.get('email');
+      
+      if (!fullName || !email) {
+        showToast('Please fill in all required fields', 'error');
+        return;
+      }
+      
+      try {
+        const response = await api.post(`/rooms/${examData.roomCode}/register`, {
+          registrationData: {
+            fullName,
+            email,
+            studentId: formData.get('studentId')
+          }
+        });
+        
+        sessionStorage.setItem('examSubmissionId', response.data.submissionId);
+        window.location.href = 'exam.html';
+        
+      } catch (error) {
+        showToast(error.message || 'Registration failed', 'error');
+      }
+    }
+  </script>
+</body>
+</html>

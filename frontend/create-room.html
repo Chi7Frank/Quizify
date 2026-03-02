@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create a new assessment room">
+  <title>Create Room - QuizMaster Pro</title>
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/pages/create-room.css">
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <button 
+        type="button" 
+        class="btn btn-ghost btn-icon"
+        onclick="history.back()"
+        aria-label="Go back"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_back_ios_new</span>
+      </button>
+      <h1 class="page-title">Create Room</h1>
+      <div class="header-spacer"></div>
+    </div>
+  </header>
+  
+  <!-- Progress Steps -->
+  <div class="progress-container">
+    <div class="progress-steps" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="3" aria-label="Form progress">
+      <div class="progress-step active" data-step="1"></div>
+      <div class="progress-step" data-step="2"></div>
+      <div class="progress-step" data-step="3"></div>
+    </div>
+    <p class="progress-label">Step 1 of 3</p>
+  </div>
+  
+  <!-- Main Content -->
+  <main id="main-content" class="main-content">
+    <h2 class="section-title">Basic Settings</h2>
+    
+    <form id="create-room-form" class="create-form" novalidate>
+      <!-- Room Name -->
+      <div class="form-group">
+        <label for="room-name" class="form-label">Room Name</label>
+        <input 
+          type="text" 
+          id="room-name" 
+          name="roomName"
+          class="form-input" 
+          placeholder="e.g., Biology 101 Quiz"
+          required
+          aria-required="true"
+        >
+      </div>
+      
+      <!-- Room Code -->
+      <div class="form-group">
+        <label class="form-label">Room Code</label>
+        <div class="room-code-display">
+          <span class="room-code" id="room-code" aria-live="polite">----</span>
+          <button 
+            type="button" 
+            class="btn btn-ghost btn-icon"
+            onclick="generateNewCode()"
+            aria-label="Generate new room code"
+            title="Generate new code"
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">refresh</span>
+          </button>
+        </div>
+        <p class="form-hint">Share this code with your students to join.</p>
+      </div>
+      
+      <!-- Unlimited Participants Toggle -->
+      <div class="form-group">
+        <div class="toggle-card">
+          <div class="toggle-info">
+            <div class="toggle-header">
+              <span class="material-symbols-outlined toggle-icon" aria-hidden="true">groups</span>
+              <span class="toggle-title">Unlimited Participants</span>
+            </div>
+            <p class="toggle-description">Allow any number of students to join</p>
+          </div>
+          <label class="toggle">
+            <input 
+              type="checkbox" 
+              name="isUnlimited" 
+              id="unlimited-toggle"
+              checked
+              onchange="toggleMaxParticipants()"
+            >
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      
+      <!-- Max Participants (hidden when unlimited) -->
+      <div class="form-group hidden" id="max-participants-group">
+        <label for="max-participants" class="form-label">Max Participants</label>
+        <input 
+          type="number" 
+          id="max-participants" 
+          name="maxParticipants"
+          class="form-input" 
+          placeholder="Enter number of students"
+          min="1"
+          max="1000"
+        >
+      </div>
+      
+      <!-- Take Attendance Toggle -->
+      <div class="form-group">
+        <div class="toggle-card">
+          <div class="toggle-info">
+            <div class="toggle-header">
+              <span class="material-symbols-outlined toggle-icon" aria-hidden="true">how_to_reg</span>
+              <span class="toggle-title">Take Attendance</span>
+            </div>
+            <p class="toggle-description">Collect student details before starting</p>
+          </div>
+          <label class="toggle">
+            <input 
+              type="checkbox" 
+              name="takeAttendance" 
+              id="attendance-toggle"
+              onchange="toggleAttendanceInfo()"
+            >
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        
+        <!-- Attendance Info -->
+        <div class="info-card hidden" id="attendance-info">
+          <span class="material-symbols-outlined" aria-hidden="true">info</span>
+          <p>Student Registration Form will be customized in the next step.</p>
+        </div>
+      </div>
+      
+      <!-- Schedule -->
+      <div class="form-group">
+        <h3 class="subsection-title">
+          <span class="material-symbols-outlined" aria-hidden="true">calendar_today</span>
+          Schedule
+        </h3>
+        <div class="schedule-grid">
+          <div>
+            <label for="start-time" class="form-label form-label-small">Starts</label>
+            <input 
+              type="datetime-local" 
+              id="start-time" 
+              name="startTime"
+              class="form-input"
+            >
+          </div>
+          <div>
+            <label for="end-time" class="form-label form-label-small">Ends</label>
+            <input 
+              type="datetime-local" 
+              id="end-time" 
+              name="endTime"
+              class="form-input"
+            >
+          </div>
+        </div>
+      </div>
+    </form>
+  </main>
+  
+  <!-- Bottom Action Bar -->
+  <div class="bottom-bar">
+    <button 
+      type="button" 
+      class="btn btn-primary btn-lg btn-full"
+      onclick="handleNextStep()"
+    >
+      Next Step
+      <span class="material-symbols-outlined" aria-hidden="true">arrow_forward_ios</span>
+    </button>
+  </div>
+  
+  <!-- Scripts -->
+  <script src="scripts/utils.js"></script>
+  <script src="scripts/pages/create-room.js"></script>
+</body>
+</html>
