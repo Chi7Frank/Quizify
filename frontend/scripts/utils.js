@@ -6,65 +6,79 @@
  */
 
 // API Base URL
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = "http://localhost:3000/api";
 
 // ========================================
 // API Client
 // ========================================
 
 /**
- * Make API request
+ * Make mock API request
  * @param {string} endpoint - API endpoint
  * @param {Object} options - Fetch options
  * @returns {Promise<Object>} Response data
  */
 async function apiRequest(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
-  
-  const defaultOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    credentials: 'include'
-  };
-  
-  // Add auth token if available
-  const token = localStorage.getItem('token');
-  if (token) {
-    defaultOptions.headers['Authorization'] = `Bearer ${token}`;
-  }
-  
-  const config = {
-    ...defaultOptions,
+
+  const fetchOptions = {
     ...options,
     headers: {
-      ...defaultOptions.headers,
-      ...options.headers
-    }
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
+    // Required to send cookies (like session tokens) back and forth
+    credentials: "omit", // Using omit for simpler testing with file:// protocol or simple setups, use "include" if using http-only cookies
   };
-  
+
+  // Add JWT token from localStorage if it exists
+  const token = localStorage.getItem("token");
+  if (token) {
+    fetchOptions.headers["Authorization"] = `Bearer ${token}`;
+  }
+
   try {
-    const response = await fetch(url, config);
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || 'An error occurred');
+    const response = await fetch(url, fetchOptions);
+
+    // Check if the response is JSON
+    const contentType = response.headers.get("content-type");
+    let data;
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
+    } else {
+      data = { message: await response.text() };
     }
-    
+
+    if (!response.ok) {
+      throw new Error(
+        data.message || data.error || `HTTP error! status: ${response.status}`,
+      );
+    }
+
     return data;
   } catch (error) {
-    console.error('API Error:', error);
+    console.error("API Error:", error);
+    // Explicitly catch the "failed to fetch" scenario to explain it better
+    if (
+      error.name === "TypeError" &&
+      error.message.toLowerCase().includes("fetch")
+    ) {
+      throw new Error(
+        "Cannot connect to the backend server. Please ensure the backend server is running on localhost:3000.",
+      );
+    }
     throw error;
   }
 }
 
 // HTTP Methods
 const api = {
-  get: (endpoint) => apiRequest(endpoint, { method: 'GET' }),
-  post: (endpoint, body) => apiRequest(endpoint, { method: 'POST', body: JSON.stringify(body) }),
-  put: (endpoint, body) => apiRequest(endpoint, { method: 'PUT', body: JSON.stringify(body) }),
-  delete: (endpoint) => apiRequest(endpoint, { method: 'DELETE' })
+  get: (endpoint) => apiRequest(endpoint, { method: "GET" }),
+  post: (endpoint, body) =>
+    apiRequest(endpoint, { method: "POST", body: JSON.stringify(body) }),
+  put: (endpoint, body) =>
+    apiRequest(endpoint, { method: "PUT", body: JSON.stringify(body) }),
+  delete: (endpoint) => apiRequest(endpoint, { method: "DELETE" }),
 };
 
 // ========================================
@@ -76,7 +90,7 @@ const api = {
  * @returns {boolean}
  */
 function isAuthenticated() {
-  return !!localStorage.getItem('token');
+  return !!localStorage.getItem("token");
 }
 
 /**
@@ -84,7 +98,7 @@ function isAuthenticated() {
  * @returns {Object|null}
  */
 function getCurrentUser() {
-  const user = localStorage.getItem('user');
+  const user = localStorage.getItem("user");
   return user ? JSON.parse(user) : null;
 }
 
@@ -94,10 +108,10 @@ function getCurrentUser() {
  */
 function setAuth(data) {
   if (data.token) {
-    localStorage.setItem('token', data.token);
+    localStorage.setItem("token", data.token);
   }
   if (data.user) {
-    localStorage.setItem('user', JSON.stringify(data.user));
+    localStorage.setItem("user", JSON.stringify(data.user));
   }
 }
 
@@ -105,8 +119,8 @@ function setAuth(data) {
  * Clear authentication data
  */
 function clearAuth() {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
 }
 
 /**
@@ -114,12 +128,12 @@ function clearAuth() {
  */
 async function logout() {
   try {
-    await api.post('/auth/logout');
+    await api.post("/auth/logout");
   } catch (error) {
-    console.error('Logout error:', error);
+    console.error("Logout error:", error);
   } finally {
     clearAuth();
-    window.location.href = 'login.html';
+    window.location.href = "login.html";
   }
 }
 
@@ -133,40 +147,40 @@ async function logout() {
  * @param {string} type - Toast type (success, error, warning, info)
  * @param {number} duration - Duration in milliseconds
  */
-function showToast(message, type = 'info', duration = 3000) {
+function showToast(message, type = "info", duration = 3000) {
   // Create toast container if not exists
-  let container = document.querySelector('.toast-container');
+  let container = document.querySelector(".toast-container");
   if (!container) {
-    container = document.createElement('div');
-    container.className = 'toast-container';
-    container.setAttribute('role', 'alert');
-    container.setAttribute('aria-live', 'polite');
+    container = document.createElement("div");
+    container.className = "toast-container";
+    container.setAttribute("role", "alert");
+    container.setAttribute("aria-live", "polite");
     document.body.appendChild(container);
   }
-  
+
   // Create toast element
-  const toast = document.createElement('div');
+  const toast = document.createElement("div");
   toast.className = `toast toast-${type}`;
-  
+
   // Icon based on type
   const icons = {
-    success: 'check_circle',
-    error: 'error',
-    warning: 'warning',
-    info: 'info'
+    success: "check_circle",
+    error: "error",
+    warning: "warning",
+    info: "info",
   };
-  
+
   toast.innerHTML = `
     <span class="material-symbols-outlined" aria-hidden="true">${icons[type]}</span>
     <span>${escapeHtml(message)}</span>
   `;
-  
+
   container.appendChild(toast);
-  
+
   // Remove after duration
   setTimeout(() => {
-    toast.style.opacity = '0';
-    toast.style.transform = 'translateY(-20px)';
+    toast.style.opacity = "0";
+    toast.style.transform = "translateY(-20px)";
     setTimeout(() => toast.remove(), 300);
   }, duration);
 }
@@ -183,7 +197,7 @@ function showToast(message, type = 'info', duration = 3000) {
 function getFormData(form) {
   const formData = new FormData(form);
   const data = {};
-  
+
   for (const [key, value] of formData.entries()) {
     if (data[key]) {
       if (!Array.isArray(data[key])) {
@@ -194,7 +208,7 @@ function getFormData(form) {
       data[key] = value;
     }
   }
-  
+
   return data;
 }
 
@@ -215,29 +229,29 @@ function isValidEmail(email) {
 function validatePassword(password) {
   const result = {
     valid: true,
-    errors: []
+    errors: [],
   };
-  
+
   if (password.length < 8) {
     result.valid = false;
-    result.errors.push('Password must be at least 8 characters');
+    result.errors.push("Password must be at least 8 characters");
   }
-  
+
   if (!/[a-z]/.test(password)) {
     result.valid = false;
-    result.errors.push('Password must contain a lowercase letter');
+    result.errors.push("Password must contain a lowercase letter");
   }
-  
+
   if (!/[A-Z]/.test(password)) {
     result.valid = false;
-    result.errors.push('Password must contain an uppercase letter');
+    result.errors.push("Password must contain an uppercase letter");
   }
-  
+
   if (!/\d/.test(password)) {
     result.valid = false;
-    result.errors.push('Password must contain a number');
+    result.errors.push("Password must contain a number");
   }
-  
+
   return result;
 }
 
@@ -247,22 +261,22 @@ function validatePassword(password) {
  * @param {string} message - Error message
  */
 function showFieldError(field, message) {
-  field.classList.add('form-input-error');
-  
+  field.classList.add("form-input-error");
+
   // Remove existing error
-  const existingError = field.parentElement.querySelector('.form-error');
+  const existingError = field.parentElement.querySelector(".form-error");
   if (existingError) {
     existingError.remove();
   }
-  
+
   // Add error message
-  const error = document.createElement('span');
-  error.className = 'form-error';
+  const error = document.createElement("span");
+  error.className = "form-error";
   error.innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">error</span>${escapeHtml(message)}`;
   field.parentElement.appendChild(error);
-  
+
   // Announce to screen readers
-  announceToScreenReader(message, 'assertive');
+  announceToScreenReader(message, "assertive");
 }
 
 /**
@@ -270,8 +284,8 @@ function showFieldError(field, message) {
  * @param {HTMLElement} field - Form field
  */
 function clearFieldError(field) {
-  field.classList.remove('form-input-error');
-  const error = field.parentElement.querySelector('.form-error');
+  field.classList.remove("form-input-error");
+  const error = field.parentElement.querySelector(".form-error");
   if (error) {
     error.remove();
   }
@@ -286,16 +300,16 @@ function clearFieldError(field) {
  * @param {string} message - Message to announce
  * @param {string} priority - Announcement priority (polite/assertive)
  */
-function announceToScreenReader(message, priority = 'polite') {
-  const announcement = document.createElement('div');
-  announcement.setAttribute('role', 'status');
-  announcement.setAttribute('aria-live', priority);
-  announcement.setAttribute('aria-atomic', 'true');
-  announcement.className = 'sr-only';
+function announceToScreenReader(message, priority = "polite") {
+  const announcement = document.createElement("div");
+  announcement.setAttribute("role", "status");
+  announcement.setAttribute("aria-live", priority);
+  announcement.setAttribute("aria-atomic", "true");
+  announcement.className = "sr-only";
   announcement.textContent = message;
-  
+
   document.body.appendChild(announcement);
-  
+
   setTimeout(() => announcement.remove(), 1000);
 }
 
@@ -305,14 +319,14 @@ function announceToScreenReader(message, priority = 'polite') {
  */
 function trapFocus(element) {
   const focusableElements = element.querySelectorAll(
-    'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
+    'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select',
   );
-  
+
   const firstFocusable = focusableElements[0];
   const lastFocusable = focusableElements[focusableElements.length - 1];
-  
-  element.addEventListener('keydown', (e) => {
-    if (e.key === 'Tab') {
+
+  element.addEventListener("keydown", (e) => {
+    if (e.key === "Tab") {
       if (e.shiftKey && document.activeElement === firstFocusable) {
         e.preventDefault();
         lastFocusable.focus();
@@ -321,9 +335,9 @@ function trapFocus(element) {
         firstFocusable.focus();
       }
     }
-    
-    if (e.key === 'Escape') {
-      const closeButton = element.querySelector('[data-close-modal]');
+
+    if (e.key === "Escape") {
+      const closeButton = element.querySelector("[data-close-modal]");
       if (closeButton) {
         closeButton.click();
       }
@@ -341,23 +355,23 @@ function trapFocus(element) {
  * @param {Object} options - Speech options
  */
 function speak(text, options = {}) {
-  if (!('speechSynthesis' in window)) {
-    console.warn('Text-to-speech not supported');
+  if (!("speechSynthesis" in window)) {
+    console.warn("Text-to-speech not supported");
     return;
   }
-  
+
   // Cancel any ongoing speech
   window.speechSynthesis.cancel();
-  
+
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.rate = options.rate || 1;
   utterance.pitch = options.pitch || 1;
   utterance.volume = options.volume || 1;
-  
+
   if (options.lang) {
     utterance.lang = options.lang;
   }
-  
+
   window.speechSynthesis.speak(utterance);
 }
 
@@ -365,7 +379,7 @@ function speak(text, options = {}) {
  * Stop speech
  */
 function stopSpeech() {
-  if ('speechSynthesis' in window) {
+  if ("speechSynthesis" in window) {
     window.speechSynthesis.cancel();
   }
 }
@@ -380,7 +394,7 @@ function stopSpeech() {
  * @returns {string} Escaped text
  */
 function escapeHtml(text) {
-  const div = document.createElement('div');
+  const div = document.createElement("div");
   div.textContent = text;
   return div.innerHTML;
 }
@@ -394,13 +408,13 @@ function escapeHtml(text) {
 function formatDate(date, options = {}) {
   const d = new Date(date);
   const defaultOptions = {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   };
-  
-  return d.toLocaleDateString('en-US', { ...defaultOptions, ...options });
+
+  return d.toLocaleDateString("en-US", { ...defaultOptions, ...options });
 }
 
 /**
@@ -412,7 +426,7 @@ function formatDuration(seconds) {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const secs = seconds % 60;
-  
+
   if (hours > 0) {
     return `${hours}h ${minutes}m`;
   }
@@ -427,12 +441,12 @@ function formatDuration(seconds) {
  * @returns {string} Room code (XXXX-XX format)
  */
 function generateRoomCode() {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let code = '';
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let code = "";
   for (let i = 0; i < 4; i++) {
     code += chars.charAt(Math.floor(Math.random() * chars.length));
   }
-  code += '-';
+  code += "-";
   for (let i = 0; i < 2; i++) {
     code += chars.charAt(Math.floor(Math.random() * chars.length));
   }
@@ -469,7 +483,7 @@ function throttle(func, limit = 300) {
     if (!inThrottle) {
       func(...args);
       inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
+      setTimeout(() => (inThrottle = false), limit);
     }
   };
 }
@@ -486,7 +500,7 @@ function throttle(func, limit = 300) {
 function showButtonLoading(button, originalText) {
   button.disabled = true;
   button.dataset.originalText = originalText;
-  button.classList.add('btn-loading');
+  button.classList.add("btn-loading");
   button.textContent = originalText;
 }
 
@@ -496,7 +510,7 @@ function showButtonLoading(button, originalText) {
  */
 function hideButtonLoading(button) {
   button.disabled = false;
-  button.classList.remove('btn-loading');
+  button.classList.remove("btn-loading");
   button.textContent = button.dataset.originalText || button.textContent;
 }
 
@@ -504,7 +518,7 @@ function hideButtonLoading(button) {
 // Export
 // ========================================
 
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     api,
     isAuthenticated,
@@ -529,6 +543,6 @@ if (typeof module !== 'undefined' && module.exports) {
     debounce,
     throttle,
     showButtonLoading,
-    hideButtonLoading
+    hideButtonLoading,
   };
 }
