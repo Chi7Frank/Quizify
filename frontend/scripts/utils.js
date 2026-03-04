@@ -50,6 +50,13 @@ async function apiRequest(endpoint, options = {}) {
     }
 
     if (!response.ok) {
+      if (data.code === "VALIDATION_ERROR" && data.details) {
+        console.error("Validation Details:", data.details);
+        const detailedMsg = data.details
+          .map((d) => `${d.field}: ${d.message}`)
+          .join(", ");
+        throw new Error(`Validation failed: ${detailedMsg}`);
+      }
       throw new Error(
         data.message || data.error || `HTTP error! status: ${response.status}`,
       );
